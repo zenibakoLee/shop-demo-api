@@ -1,13 +1,17 @@
 package com.example.demo.model;
 
 import io.hypersistence.tsid.TSID;
+import jakarta.persistence.Access;
+import jakarta.persistence.AccessType;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 @MappedSuperclass
-public abstract class EntityId {
+@Access(AccessType.FIELD)
+public abstract class EntityId implements Serializable {
     @Column(name = "id")
     private String value;
 

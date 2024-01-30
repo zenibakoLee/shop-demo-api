@@ -53,6 +53,19 @@ public class Product {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    protected Product() {
+    }
+
+    public Product(ProductId id, CategoryId categoryId, List<Image> images, String name, Money price, List<ProductOption> options, String description) {
+        this.id = id;
+        this.categoryId = categoryId;
+        this.images = images;
+        this.name = name;
+        this.price = price;
+        this.options = options;
+        this.description = description;
+    }
+
     public CategoryId categoryId() {
         return categoryId;
     }
@@ -71,6 +84,18 @@ public class Product {
 
     public Money price() {
         return price;
+    }
+
+    public ProductOption option(int optionIndex) {
+        return this.options.get(optionIndex);
+    }
+
+    public int optionSize() {
+        return this.options.size();
+    }
+
+    public ProductOption optionById(ProductOptionId optionId) {
+        return this.options.stream().filter((option) -> option.id().equals(optionId)).findFirst().get();
     }
 }
 // …(후략)…

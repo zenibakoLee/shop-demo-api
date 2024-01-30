@@ -44,4 +44,8 @@ public class Money {
     public Long asLong() {
         return amount;
     }
+
+    public Money times(int quantity) {
+        return new Money(this.amount * quantity);
+    }
 }

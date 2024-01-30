@@ -5,7 +5,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-
+/**
+ * 주로 인증 및 보안과 관련된 작업을 수행합니다.
+ * 실제 인증 작업을 위한 정보(예: 액세스 토큰)를 관리하며, 데이터베이스의 access_tokens 테이블과 매핑될 수 있습니다.
+ */
 @Component
 public class AuthUserDao {
     private final JdbcTemplate jdbcTemplate;

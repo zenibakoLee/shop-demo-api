@@ -34,4 +34,29 @@ public class ProductOption {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    public ProductOption() {
+    }
+
+    public ProductOption(ProductOptionId id, String name, List<ProductOptionItem> items) {
+        this.id = id;
+        this.name = name;
+        this.items = items;
+    }
+
+    public ProductOptionId id() {
+        return id;
+    }
+
+    public ProductOptionItem item(int optionItemIndex) {
+        return this.items.get(optionItemIndex);
+    }
+
+    public String name() {
+        return this.name;
+    }
+
+    public ProductOptionItem itemById(ProductOptionItemId itemId) {
+        return this.items.stream().filter(productOptionItem -> productOptionItem.id().equals(itemId)).findFirst().get();
+    }
 }

@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 public class BackdoorController {
     private final JdbcTemplate jdbcTemplate;
     private final PasswordEncoder passwordEncoder;
-    
+
     public BackdoorController(JdbcTemplate jdbcTemplate, PasswordEncoder passwordEncoder) {
         this.jdbcTemplate = jdbcTemplate;
         this.passwordEncoder = passwordEncoder;
@@ -33,6 +33,9 @@ public class BackdoorController {
         deleteCategories();
         deleteAccessTokens();
         deleteUsers();
+        deleteCartLineItemOptions();
+        deleteCartLineItems();
+        deleteCarts();
 
         createCategories();
         createProducts();
@@ -226,6 +229,17 @@ public class BackdoorController {
         );
     }
 
+    private void deleteCarts() {
+        jdbcTemplate.update("DELETE FROM carts");
+    }
+
+    private void deleteCartLineItems() {
+        jdbcTemplate.update("DELETE FROM cart_line_items");
+    }
+
+    private void deleteCartLineItemOptions() {
+        jdbcTemplate.update("DELETE FROM cart_line_item_options");
+    }
 
 // …(후략)…
 }

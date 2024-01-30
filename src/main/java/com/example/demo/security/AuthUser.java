@@ -1,7 +1,8 @@
 package com.example.demo.security;
 
 /*
-DTO 에 가깝다
+DTO 에 가까움.
+AuthUser는 사용자를 나타내지만, 주로 인증된 사용자에 대한 정보를 포함합니다.
  */
 public record AuthUser(
         String id,

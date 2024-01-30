@@ -1,15 +1,16 @@
 package com.example.demo.model;
 
-//import jakarta.persistence.Embeddable;
+import jakarta.persistence.Embeddable;
+
 
 /**
  * Identifier VO 클래스
  */
 
-//@Embeddable
+@Embeddable
 public class CategoryId extends EntityId//implements Serializable
 {
-    private CategoryId() {
+    public CategoryId() {
         super();
     }
 

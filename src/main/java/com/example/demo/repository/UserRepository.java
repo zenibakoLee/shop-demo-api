@@ -10,4 +10,6 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends CrudRepository<User, UserId> { // thanks to Spring data jpa
     Optional<User> findById(UserId userId);
+
+    Boolean existsByEmail(String email);
 }

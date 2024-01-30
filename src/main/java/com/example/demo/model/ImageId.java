@@ -5,10 +5,12 @@ package com.example.demo.model;
 //import org.hibernate.annotations.CreationTimestamp;
 //import org.hibernate.annotations.UpdateTimestamp;
 
-//@Embeddable
+import jakarta.persistence.Embeddable;
+
+@Embeddable
 public class ImageId extends EntityId //implements Serializable
 {
-    private ImageId() {
+    public ImageId() {
         super();
     }
 
