@@ -5,3 +5,6 @@ spring:
     password: password
 jwt:
   secret: SECRET
+portone:
+  rest_api_key: REST-API-KEY
+  rest_api_secret: REST-API-SECRET

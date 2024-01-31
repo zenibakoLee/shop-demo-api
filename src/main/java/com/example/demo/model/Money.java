@@ -11,6 +11,8 @@ import java.util.Objects;
  */
 @Embeddable // VO 표현할때 일반적으로 사용 + equals() and hashcode()
 public class Money {
+    public static final Money ZERO = new Money(0L);
+
     @Column(name = "amount")
     private Long amount;
 
@@ -47,5 +49,9 @@ public class Money {
 
     public Money times(int quantity) {
         return new Money(this.amount * quantity);
+    }
+
+    public Money plus(Money money) {
+        return new Money(this.amount + money.amount);
     }
 }
