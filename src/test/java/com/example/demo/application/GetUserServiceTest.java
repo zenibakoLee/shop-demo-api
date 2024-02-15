@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import static com.example.demo.model.Role.ROLE_ADMIN;
 import static com.example.demo.model.Role.ROLE_USER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -51,6 +52,46 @@ class GetUserServiceTest {
 
         assertThatThrownBy(() -> {
             getUserService.getUser(userId);
+        }).isInstanceOf(NoSuchElementException.class);
+    }
+
+    @Test
+    @DisplayName("gerAdminUser - when the user exists and its role is admin")
+    void getAdminUser() {
+        UserId userId = UserId.generate();
+
+        User user = new User(userId, "admin@example.com", "Admin", ROLE_ADMIN);
+
+        given(userRepository.findById(userId)).willReturn(Optional.of(user));
+
+        User found = getUserService.getAdminUser(userId);
+
+        assertThat(found).isEqualTo(user);
+    }
+
+    @Test
+    @DisplayName("gerAdminUser - when the user exists and its role is user")
+    void getAdminUserWithoutAdminRole() {
+        UserId userId = UserId.generate();
+
+        User user = new User(userId, "tester@example.com", "Tester", ROLE_USER);
+
+        given(userRepository.findById(userId)).willReturn(Optional.of(user));
+
+        assertThatThrownBy(() -> {
+            getUserService.getAdminUser(userId);
+        }).isInstanceOf(NoSuchElementException.class);
+    }
+
+    @Test
+    @DisplayName("gerUser - when the user doesn't exist")
+    void getAdminUserNotFound() {
+        UserId userId = UserId.generate();
+
+        given(userRepository.findById(userId)).willReturn(Optional.empty());
+
+        assertThatThrownBy(() -> {
+            getUserService.getAdminUser(userId);
         }).isInstanceOf(NoSuchElementException.class);
     }
 }

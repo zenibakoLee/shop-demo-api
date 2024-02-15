@@ -20,8 +20,12 @@ public class GetCategoryListService {
 //        Category category = new Category(id, "top");
 //        return List.of(category);
 
-        return categoryRepository.findAll();
+//        return categoryRepository.findAll();
+        return categoryRepository.findAllByHiddenIsFalseOrderByIdAsc();
 
+    }
 
+    public List<Category> getAllCategories() {
+        return categoryRepository.findAllByOrderByIdAsc();
     }
 }

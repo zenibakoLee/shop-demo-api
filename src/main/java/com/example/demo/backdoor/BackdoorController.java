@@ -92,18 +92,26 @@ public class BackdoorController {
 
         jdbcTemplate.update("""
                         INSERT INTO categories (
-                            id, name, created_at, updated_at)
-                        VALUES (?, ?, ?, ?)
+                            id, name, hidden, created_at, updated_at)
+                        VALUES (?, ?, ?, ?, ?)
                         """,
-                "0BV000CAT0001", "top", now, now
+                "0BV000CAT0001", "top", false, now, now
         );
 
         jdbcTemplate.update("""
                         INSERT INTO categories (
-                            id, name, created_at, updated_at)
-                        VALUES (?, ?, ?, ?)
+                            id, name, hidden, created_at, updated_at)
+                        VALUES (?, ?, ?, ?, ?)
                         """,
-                "0BV000CAT0002", "outer", now, now
+                "0BV000CAT0002", "outer", false, now, now
+        );
+
+        jdbcTemplate.update("""
+                        INSERT INTO categories (
+                            id, name, hidden, created_at, updated_at)
+                        VALUES (?, ?, ?, ?, ?)
+                        """,
+                "0BV000CAT0003", "HIDDEN", true, now, now
         );
     }
 
@@ -112,23 +120,34 @@ public class BackdoorController {
 
         jdbcTemplate.update("""
                         INSERT INTO products (
-                            id, category_id, name, price, description,
+                            id, category_id, name, price, description, hidden,
                             created_at, updated_at)
-                        VALUES (?, ?, ?, ?, ?, ?, ?)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                         """,
                 "0BV000PRO0001", "0BV000CAT0001",
-                "맨투맨", 128_000L, "편하게 입을 수 있는 맨투맨",
+                "맨투맨", 128_000L, "편하게 입을 수 있는 맨투맨", false,
                 now, now
         );
 
         jdbcTemplate.update("""
                         INSERT INTO products (
-                            id, category_id, name, price, description,
+                            id, category_id, name, price, description, hidden,
                             created_at, updated_at)
-                        VALUES (?, ?, ?, ?, ?, ?, ?)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                         """,
                 "0BV000PRO0002", "0BV000CAT0001",
-                "셔츠", 118_000L, "편합니다",
+                "셔츠", 118_000L, "편합니다", false,
+                now, now
+        );
+
+        jdbcTemplate.update("""
+                        INSERT INTO products (
+                            id, category_id, name, price, description, hidden,
+                            created_at, updated_at)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                        """,
+                "0BV000PRO0003", "0BV000CAT0001",
+                "HIDDEN", 256_000L, "Hidden Product", true,
                 now, now
         );
     }
@@ -150,6 +169,15 @@ public class BackdoorController {
                         VALUES (?, ?, ?, ?, ?)
                         """,
                 "0BV000IMG0002", "0BV000PRO0002", "https://ahastudio.github.io/my-image-assets/images/cbcl-products/02",
+                now, now
+        );
+        jdbcTemplate.update("""
+                        INSERT INTO images (
+                            id, product_id, url, created_at, updated_at)
+                        VALUES (?, ?, ?, ?, ?)
+                        """,
+                "0BV000IMG0003", "0BV000PRO0003",
+                "https://ahastudio.github.io/my-image-assets/images/cbcl-products/01.jpg",
                 now, now
         );
     }

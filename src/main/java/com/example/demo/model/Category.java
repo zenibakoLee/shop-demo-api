@@ -12,6 +12,10 @@ import java.time.LocalDateTime;
 /*
  model => jpa entity
  Aggregate Root.
+
+ALTER TABLE categories
+ADD COLUMN hidden boolean NOT NULL DEFAULT TRUE;
+UPDATE categories SET hidden = FALSE;
  */
 @Entity
 @Table(name = "categories")
@@ -23,6 +27,15 @@ public class Category {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "hidden")
+    private boolean hidden;
+
+    public Category(CategoryId id, String name, boolean hidden) {
+        this.id = id;
+        this.name = name;
+        this.hidden = hidden;
+    }
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 
@@ -33,8 +46,7 @@ public class Category {
 //    }
 
     public Category(CategoryId id, String name) {
-        this.id = id;
-        this.name = name;
+        this(id, name, false);
     }
 
     public Category() {
@@ -49,5 +61,20 @@ public class Category {
         return name;
     }
 
+    public boolean hidden() {
+        return hidden;
+    }
+
+    public void changeName(String name) {
+        this.name = name;
+    }
+
+    public void show() {
+        this.hidden = false;
+    }
+
+    public void hide() {
+        this.hidden = true;
+    }
 }
 // …(후략)…

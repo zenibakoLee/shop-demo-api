@@ -22,7 +22,21 @@ import java.util.List;
 public class Product {
     @EmbeddedId
     private ProductId id;
+    /*
+    상품 테이블에 hidden 컬럼 추가.
+    ALTER TABLE products
+ADD COLUMN hidden boolean NOT NULL DEFAULT TRUE;
 
+기존 상품은 모두 보여주게 한다.
+UPDATE products SET hidden = FALSE;
+
+상품을 추가하거나 수정할 때 문제가 없도록 “NOT NULL”을 없앤다.
+ALTER TABLE images ALTER COLUMN product_id DROP NOT NULL;
+ALTER TABLE product_options ALTER COLUMN product_id DROP NOT NULL;
+ALTER TABLE product_option_items ALTER COLUMN product_option_id DROP NOT NULL;
+     */
+    @Column(name = "hidden")
+    private boolean hidden;
     @Embedded
     @AttributeOverride(name = "value", column = @Column(name = "category_id")) // @Column override in Product
     private CategoryId categoryId;
@@ -96,6 +110,10 @@ public class Product {
 
     public ProductOption optionById(ProductOptionId optionId) {
         return this.options.stream().filter((option) -> option.id().equals(optionId)).findFirst().get();
+    }
+
+    public boolean hidden() {
+        return hidden;
     }
 }
 // …(후략)…

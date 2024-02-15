@@ -12,6 +12,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 
+import static com.example.demo.model.Role.ROLE_ADMIN;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -59,5 +61,17 @@ public class User {
 
     public void changePassword(String password, PasswordEncoder passwordEncoder) {
         this.encodedPassword = passwordEncoder.encode(password);
+    }
+
+    public boolean isAdmin() {
+        return role.equals(ROLE_ADMIN);
+    }
+
+    public String email() {
+        return email;
+    }
+
+    public Role role() {
+        return role;
     }
 }

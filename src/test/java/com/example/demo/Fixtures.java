@@ -4,6 +4,11 @@ import com.example.demo.model.Address;
 import com.example.demo.model.CategoryId;
 import com.example.demo.model.Image;
 import com.example.demo.model.Money;
+import com.example.demo.model.Order;
+import com.example.demo.model.OrderId;
+import com.example.demo.model.OrderLineItem;
+import com.example.demo.model.OrderLineItemId;
+import com.example.demo.model.OrderStatus;
 import com.example.demo.model.Payment;
 import com.example.demo.model.PhoneNumber;
 import com.example.demo.model.PostalCode;
@@ -14,11 +19,31 @@ import com.example.demo.model.ProductOptionId;
 import com.example.demo.model.ProductOptionItem;
 import com.example.demo.model.ProductOptionItemId;
 import com.example.demo.model.Receiver;
+import com.example.demo.model.User;
+import com.example.demo.model.UserId;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import static com.example.demo.TestUtils.createOrderOptions;
+import static com.example.demo.model.Role.ROLE_ADMIN;
+import static com.example.demo.model.Role.ROLE_USER;
+
 public class Fixtures {
+    public static User user(String username) {
+        if (username.equals("tester")) {
+            return new User(new UserId("0BV000USR0001"), "tester@example.com",
+                    "테스터", ROLE_USER);
+        }
+
+        if (username.equals("admin")) {
+            return new User(new UserId("0BV000USR0002"), "admin@example.com",
+                    "관리자", ROLE_ADMIN);
+        }
+
+        throw new NoSuchElementException("User - username: " + username);
+    }
+
     public static Product product(String name) {
         if (name.equals("맨투맨")) {
             return new Product(
@@ -111,6 +136,27 @@ public class Fixtures {
         }
 
         throw new NoSuchElementException("ProductOptionItem - name: " + name);
+    }
+
+    public static Order order(User user) {
+        Product product = Fixtures.product("맨투맨");
+
+        List<OrderLineItem> lineItems = List.of(
+                new OrderLineItem(
+                        OrderLineItemId.generate(),
+                        product,
+                        createOrderOptions(product, new int[]{0, 0}),
+                        1
+                )
+        );
+
+        Receiver receiver = Fixtures.receiver("홍길동");
+        Payment payment = Fixtures.payment();
+
+        OrderId orderId = OrderId.generate();
+
+        return new Order(orderId, user.id(), lineItems, receiver, payment,
+                OrderStatus.PAID);
     }
 
     public static Receiver receiver(String name) {
