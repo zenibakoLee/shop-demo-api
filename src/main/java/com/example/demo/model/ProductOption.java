@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import com.example.demo.dto.AdminUpdateProductDto;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
@@ -58,5 +59,33 @@ public class ProductOption {
 
     public ProductOptionItem itemById(ProductOptionItemId itemId) {
         return this.items.stream().filter(productOptionItem -> productOptionItem.id().equals(itemId)).findFirst().get();
+    }
+
+    public void changeName(String name) {
+        this.name = name;
+    }
+
+    public void updateItems(List<AdminUpdateProductDto.OptionItemDto> items) {
+        this.items.removeIf(item -> {
+            String itemId = item.id().toString();
+            return items.stream().noneMatch(i -> itemId.equals(i.id()));
+        });
+
+        items.forEach(item -> {
+            if (item.id() == null) {
+                this.items.add(new ProductOptionItem(
+                        ProductOptionItemId.generate(),
+                        item.name()
+                ));
+                return;
+            }
+            this.items.stream()
+                    .filter(i -> i.id().toString().equals(item.id()))
+                    .forEach(i -> i.changeName(item.name()));
+        });
+    }
+
+    public List<ProductOptionItem> items() {
+        return items;
     }
 }

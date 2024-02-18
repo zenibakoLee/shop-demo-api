@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import com.example.demo.dto.AdminUpdateProductDto;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -114,6 +115,79 @@ ALTER TABLE product_option_items ALTER COLUMN product_option_id DROP NOT NULL;
 
     public boolean hidden() {
         return hidden;
+    }
+
+    public String description() {
+        return description;
+    }
+
+    public int imageSize() {
+        return this.images.size();
+    }
+
+    public void update(AdminUpdateProductDto productDto) {
+        this.categoryId = new CategoryId(productDto.categoryId());
+
+        updateImages(productDto.images());
+
+        this.name = productDto.name();
+
+        this.price = new Money(productDto.price());
+
+        updateOptions(productDto.options());
+
+        this.description = productDto.description();
+
+        this.hidden = productDto.hidden();
+    }
+
+    private void updateImages(List<AdminUpdateProductDto.ImageDto> images) {
+        this.images.removeIf(image -> {
+            String imageId = image.id().toString();
+            return images.stream().noneMatch(i -> imageId.equals(i.id()));
+        });
+
+        images.forEach(image -> {
+            if (image.id() == null) {
+                this.images.add(new Image(
+                        ImageId.generate(),
+                        image.url()
+                ));
+                return;
+            }
+            this.images.stream()
+                    .filter(i -> i.id().toString().equals(image.id()))
+                    .forEach(i -> i.changeUrl(image.url()));
+        });
+    }
+
+    private void updateOptions(List<AdminUpdateProductDto.OptionDto> options) {
+        this.options.removeIf(option -> {
+            String optionId = option.id().toString();
+            return options.stream().noneMatch(i -> optionId.equals(i.id()));
+        });
+
+        options.forEach(option -> {
+            if (option.id() == null) {
+                this.options.add(new ProductOption(
+                        ProductOptionId.generate(),
+                        option.name(),
+                        option.items().stream()
+                                .map(item -> new ProductOptionItem(
+                                        ProductOptionItemId.generate(),
+                                        item.name()
+                                ))
+                                .toList()
+                ));
+                return;
+            }
+            this.options.stream()
+                    .filter(i -> i.id().toString().equals(option.id()))
+                    .forEach(i -> {
+                        i.changeName(option.name());
+                        i.updateItems(option.items());
+                    });
+        });
     }
 }
 // …(후략)…

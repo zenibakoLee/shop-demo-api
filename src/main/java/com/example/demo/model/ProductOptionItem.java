@@ -39,4 +39,8 @@ public class ProductOptionItem {
     public String name() {
         return this.name;
     }
+
+    public void changeName(String name) {
+        this.name = name;
+    }
 }
